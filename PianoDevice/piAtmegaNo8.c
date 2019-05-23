@@ -35,7 +35,7 @@ inline void UART_Init() {
 	// Set dinh dang du lieu gui : 1 bit Start, 8 bit Data, 0 Bit parity, 1 bit Stop 
 	UCSRC = (1<<URSEL) | (1<<UCSZ1) | (1<<UCSZ0);
 }
-
+// gui 1 byte
 inline void UART_Transmit(unsigned char byte) {
 	while (!(UCSRA & DATA_REGISTER_EMPTY)) {};
 	UDR = byte;
@@ -61,7 +61,7 @@ inline void connect2Server() {
 	curr_cmd = CIPSTART;
 	send_cmd(TCP_ESTB_cmd);
 }
-
+// Ket noi wifi
 inline void joinAP() {
 	char JAP_cmd[30];
 	sprintf(JAP_cmd, "AT+CWJAP_DEF=\"%s\",\"%s\"", SSID, PASSWORD);
@@ -69,6 +69,7 @@ inline void joinAP() {
 	send_cmd(JAP_cmd);
 }
 
+// Cau hinh wifi
 inline void Wifi_Init() {
 	// Switches echo off
 	curr_cmd = ECHO_OFF;
@@ -85,7 +86,7 @@ inline void Wifi_Init() {
 
 	connect2Server();
 }
-
+// Kh
 inline void Sound_Init() {
 	DDRB = (1<<PB1) | (1<<PB2);
 
@@ -270,15 +271,15 @@ int main(void) {
 	
 	UART_Init();
 	
-	sei();
+	sei(); //set global interupt: thanh ghi ngat ,flat nay mở thì ngắt này mới hoạt động
 	
-	DDRC = 0x3F;
+	DDRC = 0x3F;  // Cấu hình chân ra của đèn Led ra
 	
 	Wifi_Init();
 	
 	while (1) {
 		if (ready_to_check_ipd) {
-			check_note();
+			check_note();  // 
 		}
 
 		if (isRecvResponse & FAIL) {
